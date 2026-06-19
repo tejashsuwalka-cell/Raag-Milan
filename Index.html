@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Raag-Milan — Gao, Milao, Nikhaaro</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --p:#7F77DD;--pl:#EEEDFE;--pm:#AFA9EC;--pd:#3C3489;
+  --g:#1D9E75;--gl:#E1F5EE;
+  --r:#E24B4A;--rl:#FCEBEB;
+  --bg:#F7F6FF;--sur:#fff;--sur2:#F1F0FB;
+  --bdr:rgba(127,119,221,0.15);--bdm:rgba(127,119,221,0.3);
+  --t:#1A1830;--t2:#5A5680;--t3:#9A96BE;
+  --rad:14px;--rads:8px
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-height:100vh}
+
+/* NAV */
+nav{background:var(--sur);border-bottom:1px solid var(--bdr);padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 1px 8px rgba(127,119,221,0.07)}
+.nlogo{display:flex;align-items:center;gap:10px}
+.nicon{width:36px;height:36px;background:var(--p);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nicon svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ntxt{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--t);letter-spacing:-0.5px}
+.ntxt span{color:var(--p)}
+.nsub{font-size:11px;color:var(--t3);margin-top:1px}
+.nprof{display:flex;align-items:center;gap:8px;cursor:pointer;padding:6px 12px;border-radius:99px;border:1px solid var(--bdr);transition:background 0.15s;user-select:none}
+.nprof:hover{background:var(--sur2)}
+.navtr{width:32px;height:32px;border-radius:50%;background:var(--pl);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--pd);flex-shrink:0}
+.npname{font-size:13px;font-weight:500;color:var(--t)}
+.npsub{font-size:11px;color:var(--t3)}
+
+/* HERO */
+.hero{background:var(--sur);border-bottom:1px solid var(--bdr);padding:2.5rem 2rem 2rem;text-align:center}
+.hero h1{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;color:var(--t);letter-spacing:-1px;margin-bottom:6px}
+.hero h1 em{color:var(--p);font-style:normal}
+.hero p{font-size:14px;color:var(--t2)}
+
+/* MAIN */
+.main{max-width:880px;margin:2rem auto;padding:0 1.5rem 5rem}
+
+/* STEPS */
+.steps{display:flex;align-items:center;gap:0;margin-bottom:1.5rem}
+.step{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:500;color:var(--t3)}
+.step.active{color:var(--p)}
+.step.done{color:var(--g)}
+.stepnum{width:22px;height:22px;border-radius:50%;background:var(--sur2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;border:1px solid var(--bdr)}
+.step.active .stepnum{background:var(--p);color:#fff;
+                      
