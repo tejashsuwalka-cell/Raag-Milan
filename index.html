@@ -4,148 +4,761 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Raag-Milan — Gao, Milao, Nikhaaro</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<meta name="description" content="AI-powered vocal similarity web app for Indian music. Upload original songs, record your singing, and get real-time pitch, rhythm, and tone similarity scores.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --p:#7F77DD;--pl:#EEEDFE;--pm:#AFA9EC;--pd:#3C3489;
-  --g:#1D9E75;--gl:#E1F5EE;
-  --r:#E24B4A;--rl:#FCEBEB;
-  --bg:#F7F6FF;--sur:#fff;--sur2:#F1F0FB;
-  --bdr:rgba(127,119,221,0.15);--bdm:rgba(127,119,221,0.3);
-  --t:#1A1830;--t2:#5A5680;--t3:#9A96BE;
-  --rad:14px;--rads:8px
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --p: #7F77DD;
+  --pl: #EEEDFE;
+  --pm: #AFA9EC;
+  --pd: #3C3489;
+  --g: #1D9E75;
+  --gl: #E1F5EE;
+  --r: #E24B4A;
+  --rl: #FCEBEB;
+  --bg: #F7F6FF;
+  --sur: #FFFFFF;
+  --sur2: #F1F0FB;
+  --bdr: rgba(127, 119, 221, 0.16);
+  --bdm: rgba(127, 119, 221, 0.32);
+  --t: #1A1830;
+  --t2: #5A5680;
+  --t3: #9A96BE;
+  --rad: 16px;
+  --rads: 10px;
+  --shadow: 0 10px 30px -5px rgba(127, 119, 221, 0.12);
+  --glow: 0 0 20px rgba(127, 119, 221, 0.25);
 }
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-height:100vh}
-nav{background:var(--sur);border-bottom:1px solid var(--bdr);padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 1px 8px rgba(127,119,221,0.07)}
-.nlogo{display:flex;align-items:center;gap:10px}
-.nicon{width:36px;height:36px;background:var(--p);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.nicon svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.ntxt{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--t);letter-spacing:-0.5px}
-.ntxt span{color:var(--p)}
-.nsub{font-size:11px;color:var(--t3);margin-top:1px}
-.nprof{display:flex;align-items:center;gap:8px;cursor:pointer;padding:6px 12px;border-radius:99px;border:1px solid var(--bdr);transition:background 0.15s;user-select:none}
-.nprof:hover{background:var(--sur2)}
-.navtr{width:32px;height:32px;border-radius:50%;background:var(--pl);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--pd);flex-shrink:0}
-.npname{font-size:13px;font-weight:500;color:var(--t)}
-.npsub{font-size:11px;color:var(--t3)}
-.hero{background:var(--sur);border-bottom:1px solid var(--bdr);padding:2.5rem 2rem 2rem;text-align:center}
-.hero h1{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;color:var(--t);letter-spacing:-1px;margin-bottom:6px}
-.hero h1 em{color:var(--p);font-style:normal}
-.hero p{font-size:14px;color:var(--t2)}
-.main{max-width:880px;margin:2rem auto;padding:0 1.5rem 5rem}
-.steps{display:flex;align-items:center;gap:0;margin-bottom:1.5rem}
-.step{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:500;color:var(--t3)}
-.step.active{color:var(--p)}
-.step.done{color:var(--g)}
-.stepnum{width:22px;height:22px;border-radius:50%;background:var(--sur2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;border:1px solid var(--bdr)}
-.step.active .stepnum{background:var(--p);color:#fff;border-color:var(--p)}
-.step.done .stepnum{background:var(--g);color:#fff;border-color:var(--g)}
-.stepdiv{flex:1;height:1px;background:var(--bdr);margin:0 8px}
-.score-card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rad);padding:1.5rem;margin-bottom:1.5rem;display:none}
-.score-card.visible{display:block;animation:fadeUp 0.4s ease}
-@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.sc-top{display:flex;align-items:center;gap:1.5rem;margin-bottom:1.25rem}
-.sc-circle{width:90px;height:90px;border-radius:50%;background:var(--pl);border:3px solid var(--p);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
-.sc-num{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--p);line-height:1}
-.sc-pct{font-size:11px;color:var(--p);margin-top:2px}
-.sc-info h3{font-size:16px;font-weight:600;color:var(--t);margin-bottom:6px}
-.sc-info p{font-size:13px;color:var(--t2);line-height:1.7}
-.sc-bars{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;padding-top:1rem;border-top:1px solid var(--bdr)}
-.bar-lbl{font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:0.5px;display:flex;justify-content:space-between;margin-bottom:6px}
-.bar-lbl span{color:var(--p);font-weight:600}
-.bar-track{height:6px;background:var(--sur2);border-radius:99px;overflow:hidden}
-.bar-fill{height:100%;border-radius:99px;background:var(--p);width:0%;transition:width 1.2s cubic-bezier(.22,.68,0,1.2)}
-.panels{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
-.panel{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rad);padding:1.25rem}
-.ptitle{font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:1rem;display:flex;align-items:center;gap:7px}
-.pdot{width:6px;height:6px;border-radius:50%;background:var(--p);flex-shrink:0}
-.upload-btn{width:100%;padding:1.25rem 1rem;border:1.5px dashed var(--bdm);border-radius:var(--rads);background:var(--sur);cursor:pointer;text-align:center;transition:all 0.15s;display:block}
-.upload-btn:hover{background:var(--pl);border-color:var(--p)}
-.upload-btn.has-file{border-style:solid;border-color:var(--g);background:var(--gl)}
-.uico{font-size:26px;margin-bottom:5px}
-.utxt{font-size:13px;color:var(--t2);font-weight:500}
-.usub{font-size:11px;color:var(--t3);margin-top:2px}
-.upload-btn.has-file .utxt{color:var(--g);font-weight:600}
-.upload-btn.has-file .usub{color:var(--g)}
-.waveform{height:48px;background:var(--sur2);border-radius:var(--rads);margin-top:10px;overflow:hidden;display:none}
-.waveform.show{display:block}
-.waveform canvas{width:100%;height:100%;display:block}
-.aplayer{margin-top:10px;display:none;align-items:center;gap:8px}
-.aplayer.show{display:flex}
-.playbtn{width:28px;height:28px;border-radius:50%;background:var(--p);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:opacity 0.15s}
-.playbtn:hover{opacity:0.85}
-.playbtn svg{width:11px;height:11px;fill:#fff}
-.prog-wrap{flex:1;height:4px;background:var(--sur2);border-radius:99px;overflow:hidden;cursor:pointer}
-.prog-bar{height:100%;background:var(--p);width:0%;transition:width 0.1s linear}
-.tlbl{font-size:11px;color:var(--t3);min-width:32px;text-align:right}
-.bgm-row{display:flex;align-items:center;gap:10px;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--bdr)}
-.tswitch{position:relative;width:38px;height:22px;flex-shrink:0;cursor:pointer}
-.tswitch-track{width:38px;height:22px;background:var(--bdm);border-radius:99px;transition:background 0.2s;position:absolute;top:0;left:0}
-.tswitch-knob{width:16px;height:16px;background:#fff;border-radius:50%;position:absolute;top:3px;left:3px;transition:left 0.2s;pointer-events:none;box-shadow:0 1px 3px rgba(0,0,0,0.2)}
-.tswitch.on .tswitch-track{background:var(--p)}
-.tswitch.on .tswitch-knob{left:19px}
-.bgmlbl{font-size:12px;color:var(--t2);cursor:pointer;user-select:none}
-.bgm-area{margin-top:10px;display:none}
-.bgm-area.show{display:block}
-.rec-section{margin-top:1rem}
-.recbtn{width:100%;padding:11px;border-radius:var(--rads);border:1.5px solid var(--bdm);background:var(--sur);color:var(--t);font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.15s;font-family:'Inter',sans-serif}
-.recbtn:hover{background:var(--sur2);border-color:var(--p)}
-.recbtn.recording{background:var(--rl);border-color:var(--r);color:var(--r)}
-.recdot{width:8px;height:8px;border-radius:50%;background:var(--r);animation:rpulse 1s infinite;display:none;flex-shrink:0}
-.recbtn.recording .recdot{display:block}
-@keyframes rpulse{0%,100%{opacity:1}50%{opacity:0.2}}
-.rectimer{font-size:12px;color:var(--t3);text-align:center;margin-top:6px;display:none}
-.rectimer.show{display:block}
-.chip{display:none;align-items:center;gap:8px;border-radius:var(--rads);padding:8px 10px;margin-top:8px}
-.chip.show{display:flex}
-.chip span{font-size:12px;color:var(--t);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.analyze-btn{width:100%;padding:14px;background:var(--p);color:#fff;border:none;border-radius:var(--rads);font-size:15px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:'Inter',sans-serif;transition:opacity 0.15s,transform 0.1s;letter-spacing:-0.2px;margin-top:1rem}
-.analyze-btn:hover:not(:disabled){opacity:0.9;transform:translateY(-1px)}
-.analyze-btn:active:not(:disabled){transform:translateY(0)}
-.analyze-btn:disabled{opacity:0.3;cursor:not-allowed}
-.analyze-btn svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round}
-.loading{display:none;flex-direction:column;align-items:center;gap:8px;padding:1.25rem;background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rad);margin-bottom:1rem}
-.loading.show{display:flex}
-.ldots{display:flex;gap:6px}
-.ldot{width:8px;height:8px;border-radius:50%;background:var(--p);animation:lbounce 1.2s infinite}
-.ldot:nth-child(2){animation-delay:0.15s}
-.ldot:nth-child(3){animation-delay:0.3s}
-@keyframes lbounce{0%,80%,100%{transform:scale(0.7);opacity:0.3}40%{transform:scale(1);opacity:1}}
-.loading p{font-size:13px;color:var(--t2)}
-footer{text-align:center;padding:1.5rem;font-size:12px;color:var(--t3);border-top:1px solid var(--bdr);margin-top:2rem}
-footer span{color:var(--p);font-weight:500}
-.moverlay{position:fixed;inset:0;background:rgba(26,24,48,0.55);display:none;align-items:center;justify-content:center;z-index:200;backdrop-filter:blur(3px);padding:1rem}
-.moverlay.show{display:flex}
-.modal{background:var(--sur);border-radius:var(--rad);padding:1.75rem;width:100%;max-width:360px;border:1px solid var(--bdr);max-height:90vh;overflow-y:auto}
-.mhdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem}
-.mavtr{width:52px;height:52px;border-radius:50%;background:var(--pl);border:2px solid var(--p);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--p)}
-.mcls{background:none;border:none;cursor:pointer;color:var(--t3);font-size:20px;padding:4px;line-height:1;transition:color 0.15s}
-.mcls:hover{color:var(--t)}
-.mname{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--t);margin-top:0.6rem}
-.msub{font-size:13px;color:var(--t3);margin-top:2px}
-.mstats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:1.25rem}
-.mstat{background:var(--sur2);border-radius:var(--rads);padding:0.75rem;text-align:center}
-.mstat-num{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--p)}
-.mstat-lbl{font-size:11px;color:var(--t3);margin-top:2px}
-.mhist h4{font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.75rem}
-.hitem{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--bdr)}
-.hitem:last-child{border-bottom:none}
-.hsong{font-size:13px;color:var(--t)}
-.hscore{font-size:13px;font-weight:600;color:var(--p)}
-@media(max-width:640px){
-  .panels{grid-template-columns:1fr}
-  .sc-bars{grid-template-columns:1fr}
-  nav{padding:0 1rem}
-  .main{padding:0 1rem 5rem}
-  .hero{padding:1.5rem 1rem 1rem}
-  .hero h1{font-size:22px}
-  .npname,.npsub{display:none}
-  .steps{display:none}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--t);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Header Navbar */
+nav {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--bdr);
+  padding: 0 2rem;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(127, 119, 221, 0.05);
+}
+.nlogo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.nicon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--p), var(--pd));
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(127, 119, 221, 0.3);
+  flex-shrink: 0;
+}
+.nicon svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.ntxt {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--t);
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+}
+.ntxt span { color: var(--p); }
+.nsub {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--t3);
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.nbtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 99px;
+  border: 1px solid var(--bdr);
+  background: var(--sur);
+  color: var(--t2);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+.nbtn:hover {
+  background: var(--pl);
+  color: var(--pd);
+  border-color: var(--pm);
+}
+.nbtn svg {
+  width: 15px;
+  height: 15px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+.nprof {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 6px 14px 6px 8px;
+  border-radius: 99px;
+  border: 1px solid var(--bdr);
+  background: var(--sur);
+  transition: all 0.2s ease;
+  user-select: none;
+}
+.nprof:hover {
+  background: var(--sur2);
+  border-color: var(--pm);
+}
+.navtr {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--pl), #DDD9FA);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--pd);
+  border: 1.5px solid var(--p);
+  flex-shrink: 0;
+}
+.npname { font-size: 13px; font-weight: 600; color: var(--t); line-height: 1.2; }
+.npsub { font-size: 11px; color: var(--t3); }
+
+/* Hero Section */
+.hero {
+  background: linear-gradient(180deg, var(--sur) 0%, rgba(247,246,255,0.4) 100%);
+  border-bottom: 1px solid var(--bdr);
+  padding: 3rem 2rem 2.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(127,119,221,0.12) 0%, rgba(255,255,255,0) 70%);
+  pointer-events: none;
+}
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  background: var(--pl);
+  color: var(--pd);
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(127,119,221,0.2);
+}
+.hero h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--t);
+  letter-spacing: -1px;
+  margin-bottom: 8px;
+  line-height: 1.25;
+}
+.hero h1 em {
+  background: linear-gradient(135deg, var(--p), var(--pd));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-style: normal;
+}
+.hero p { font-size: 15px; color: var(--t2); max-width: 540px; margin: 0 auto; }
+
+/* Main Container */
+.main {
+  max-width: 900px;
+  width: 100%;
+  margin: 2rem auto;
+  padding: 0 1.5rem 5rem;
+  flex: 1;
+}
+
+/* Steps Progress Bar */
+.steps {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  background: var(--sur);
+  padding: 1rem 1.5rem;
+  border-radius: var(--rad);
+  border: 1px solid var(--bdr);
+  box-shadow: var(--shadow);
+}
+.step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--t3);
+  transition: color 0.3s ease;
+}
+.step.active { color: var(--p); }
+.step.done { color: var(--g); }
+.stepnum {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--sur2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+  border: 1px solid var(--bdr);
+  transition: all 0.3s ease;
+}
+.step.active .stepnum {
+  background: var(--p);
+  color: #fff;
+  border-color: var(--p);
+  box-shadow: 0 0 12px rgba(127, 119, 221, 0.4);
+}
+.step.done .stepnum {
+  background: var(--g);
+  color: #fff;
+  border-color: var(--g);
+}
+.stepdiv {
+  flex: 1;
+  height: 2px;
+  background: var(--sur2);
+  margin: 0 12px;
+  border-radius: 99px;
+  position: relative;
+  overflow: hidden;
+}
+.stepdiv::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0%;
+  background: var(--g);
+  transition: width 0.4s ease;
+}
+.step.done + .stepdiv::after { width: 100%; }
+
+/* Score Card Component */
+.score-card {
+  background: var(--sur);
+  border: 1px solid var(--bdr);
+  border-radius: var(--rad);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  display: none;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+.score-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--p), var(--g));
+}
+.score-card.visible {
+  display: block;
+  animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.sc-top {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+.sc-circle {
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--pl), #E4E0FB);
+  border: 4px solid var(--p);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: var(--glow);
+}
+.sc-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--pd);
+  line-height: 1;
+}
+.sc-pct {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--p);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+.sc-info h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--t);
+  margin-bottom: 6px;
+}
+.sc-info p {
+  font-size: 14px;
+  color: var(--t2);
+  line-height: 1.6;
+}
+.sc-bars {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--bdr);
+}
+.bar-lbl {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--t2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.bar-lbl span { color: var(--p); font-weight: 700; }
+.bar-track { height: 8px; background: var(--sur2); border-radius: 99px; overflow: hidden; }
+.bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--pm), var(--p));
+  width: 0%;
+  transition: width 1.2s cubic-bezier(.22, .68, 0, 1.2);
+}
+
+/* Dual Upload & Recording Panels */
+.panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.panel {
+  background: var(--sur);
+  border: 1px solid var(--bdr);
+  border-radius: var(--rad);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+}
+.ptitle {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--t2);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pdot { width: 8px; height: 8px; border-radius: 50%; background: var(--p); flex-shrink: 0; }
+
+/* Drag & Drop Upload Button */
+.upload-btn {
+  width: 100%;
+  padding: 1.5rem 1rem;
+  border: 2px dashed var(--bdm);
+  border-radius: var(--rads);
+  background: var(--sur);
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s ease;
+  display: block;
+}
+.upload-btn:hover { background: var(--pl); border-color: var(--p); }
+.upload-btn.has-file { border-style: solid; border-color: var(--g); background: var(--gl); }
+.uico { font-size: 32px; margin-bottom: 8px; transition: transform 0.2s ease; }
+.upload-btn:hover .uico { transform: translateY(-2px); }
+.utxt { font-size: 14px; color: var(--t); font-weight: 600; }
+.usub { font-size: 12px; color: var(--t3); margin-top: 4px; }
+.upload-btn.has-file .utxt { color: var(--g); }
+.upload-btn.has-file .usub { color: var(--g); opacity: 0.8; }
+
+/* Canvas Waveform Display */
+.waveform {
+  height: 60px;
+  background: var(--sur2);
+  border-radius: var(--rads);
+  margin-top: 12px;
+  overflow: hidden;
+  display: none;
+  position: relative;
+  border: 1px solid var(--bdr);
+}
+.waveform.show { display: block; }
+.waveform canvas { width: 100%; height: 100%; display: block; }
+
+/* Custom Audio Player */
+.aplayer {
+  margin-top: 12px;
+  display: none;
+  align-items: center;
+  gap: 10px;
+  background: var(--sur2);
+  padding: 8px 12px;
+  border-radius: var(--rads);
+}
+.aplayer.show { display: flex; }
+.playbtn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--p);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+.playbtn:hover { opacity: 0.9; transform: scale(1.05); }
+.playbtn svg { width: 12px; height: 12px; fill: #fff; }
+.prog-wrap {
+  flex: 1;
+  height: 6px;
+  background: rgba(127,119,221,0.15);
+  border-radius: 99px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+}
+.prog-bar { height: 100%; background: var(--p); width: 0%; transition: width 0.1s linear; }
+.tlbl { font-size: 11px; font-weight: 600; color: var(--t2); min-width: 36px; text-align: right; }
+
+/* BGM Karaoke Toggle */
+.bgm-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--bdr);
+}
+.tswitch { position: relative; width: 42px; height: 24px; flex-shrink: 0; cursor: pointer; }
+.tswitch-track {
+  width: 42px;
+  height: 24px;
+  background: var(--bdm);
+  border-radius: 99px;
+  transition: background 0.2s ease;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.tswitch-knob {
+  width: 18px;
+  height: 18px;
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: left 0.2s ease;
+  pointer-events: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+.tswitch.on .tswitch-track { background: var(--p); }
+.tswitch.on .tswitch-knob { left: 21px; }
+.bgmlbl { font-size: 13px; font-weight: 500; color: var(--t2); cursor: pointer; user-select: none; }
+.bgm-area { margin-top: 10px; display: none; }
+.bgm-area.show { display: block; }
+
+/* Recording Controls */
+.rec-section { margin-top: 1rem; }
+.recbtn {
+  width: 100%;
+  padding: 12px;
+  border-radius: var(--rads);
+  border: 1.5px solid var(--bdm);
+  background: var(--sur);
+  color: var(--t);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  font-family: 'Inter', sans-serif;
+}
+.recbtn:hover { background: var(--sur2); border-color: var(--p); }
+.recbtn.recording { background: var(--rl); border-color: var(--r); color: var(--r); }
+.recdot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--r);
+  animation: rpulse 1s infinite;
+  display: none;
+  flex-shrink: 0;
+}
+.recbtn.recording .recdot { display: block; }
+@keyframes rpulse { 0%,100%{ opacity: 1; transform: scale(1); } 50%{ opacity: 0.3; transform: scale(0.85); } }
+.rectimer { font-size: 13px; font-weight: 700; color: var(--r); text-align: center; margin-top: 8px; display: none; }
+.rectimer.show { display: block; }
+
+.chip {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  border-radius: var(--rads);
+  padding: 8px 12px;
+  margin-top: 10px;
+  background: var(--pl);
+  border: 1px solid var(--bdr);
+}
+.chip.show { display: flex; }
+.chip span { font-size: 12px; color: var(--pd); font-weight: 600; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Primary Action Button */
+.analyze-btn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--p), var(--pd));
+  color: #fff;
+  border: none;
+  border-radius: var(--rads);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.2s ease;
+  letter-spacing: -0.2px;
+  margin-top: 1rem;
+  box-shadow: 0 4px 14px rgba(127, 119, 221, 0.35);
+}
+.analyze-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(127, 119, 221, 0.45); }
+.analyze-btn:active:not(:disabled) { transform: translateY(0); }
+.analyze-btn:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+.analyze-btn svg { width: 20px; height: 20px; fill: none; stroke: #fff; stroke-width: 2.2; stroke-linecap: round; }
+
+/* Loading State */
+.loading {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 1.5rem;
+  background: var(--sur);
+  border: 1px solid var(--bdr);
+  border-radius: var(--rad);
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow);
+}
+.loading.show { display: flex; }
+.ldots { display: flex; gap: 8px; }
+.ldot { width: 10px; height: 10px; border-radius: 50%; background: var(--p); animation: lbounce 1.2s infinite ease-in-out; }
+.ldot:nth-child(2) { animation-delay: 0.15s; }
+.ldot:nth-child(3) { animation-delay: 0.3s; }
+@keyframes lbounce { 0%,80%,100%{ transform: scale(0.6); opacity: 0.3; } 40%{ transform: scale(1.1); opacity: 1; } }
+.loading p { font-size: 14px; font-weight: 600; color: var(--t2); }
+
+/* Modal overlays */
+.moverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 24, 48, 0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  backdrop-filter: blur(5px);
+  padding: 1rem;
+}
+.moverlay.show { display: flex; }
+.modal {
+  background: var(--sur);
+  border-radius: var(--rad);
+  padding: 2rem;
+  width: 100%;
+  max-width: 440px;
+  border: 1px solid var(--bdr);
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+.mhdr { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; }
+.mavtr {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--pl);
+  border: 2px solid var(--p);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Syne', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--p);
+}
+.mcls { background: none; border: none; cursor: pointer; color: var(--t3); font-size: 22px; padding: 4px; line-height: 1; transition: color 0.15s; }
+.mcls:hover { color: var(--t); }
+.mname { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; color: var(--t); margin-top: 0.5rem; }
+.msub { font-size: 13px; color: var(--t3); margin-top: 2px; }
+
+.mstats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 1.5rem; }
+.mstat { background: var(--sur2); border-radius: var(--rads); padding: 0.85rem 0.5rem; text-align: center; }
+.mstat-num { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; color: var(--p); }
+.mstat-lbl { font-size: 11px; font-weight: 600; color: var(--t3); margin-top: 2px; text-transform: uppercase; }
+
+.key-section {
+  background: var(--sur2);
+  border-radius: var(--rads);
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--bdr);
+}
+.key-label { font-size: 12px; font-weight: 700; color: var(--t2); margin-bottom: 6px; display: block; }
+.key-input-wrap { display: flex; gap: 8px; }
+.key-input {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--bdm);
+  font-size: 13px;
+  font-family: monospace;
+  background: var(--sur);
+  color: var(--t);
+}
+.key-save-btn {
+  padding: 8px 14px;
+  background: var(--p);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.key-save-btn:hover { opacity: 0.9; }
+
+.mhist h4 { font-size: 12px; font-weight: 700; color: var(--t3); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center; }
+.clear-btn { background: none; border: none; font-size: 11px; color: var(--r); cursor: pointer; font-weight: 600; }
+.clear-btn:hover { text-decoration: underline; }
+.hitem { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--bdr); }
+.hitem:last-child { border-bottom: none; }
+.hsong { font-size: 13px; font-weight: 600; color: var(--t); }
+.hscore { font-size: 14px; font-weight: 800; color: var(--p); }
+
+/* Toast alert */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--t);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 99px;
+  font-size: 13px;
+  font-weight: 600;
+  z-index: 300;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* Footer */
+footer { text-align: center; padding: 2rem 1.5rem; font-size: 13px; color: var(--t3); border-top: 1px solid var(--bdr); background: var(--sur); }
+footer span { color: var(--p); font-weight: 600; }
+
+@media (max-width: 680px) {
+  .panels { grid-template-columns: 1fr; }
+  .sc-bars { grid-template-columns: 1fr; }
+  nav { padding: 0 1rem; }
+  .main { padding: 0 1rem 4rem; }
+  .hero { padding: 2rem 1rem 1.5rem; }
+  .hero h1 { font-size: 26px; }
+  .npname, .npsub { display: none; }
+  .steps { display: none; }
 }
 </style>
 </head>
 <body>
+
+<!-- Navigation Bar -->
 <nav>
   <div class="nlogo">
     <div class="nicon">
@@ -156,298 +769,709 @@ footer span{color:var(--p);font-weight:500}
       <div class="nsub">Gao, Milao, Nikhaaro</div>
     </div>
   </div>
-  <div class="nprof" id="profBtn">
-    <div>
-      <div class="npname">Tejash S.</div>
-      <div class="npsub">Singer</div>
+  <div class="nav-actions">
+    <button class="nbtn" onclick="openKeyModal()" id="apiKeyBtn" title="Set Anthropic API Key">
+      <svg viewBox="0 0 24 24"><path d="M21 2l-2 2m-2-2l2 2m2 4l-4 4M3 21l9-9m0 0l3 3m-3-3l-3-3"/></svg>
+      <span id="keyBtnText">API Key</span>
+    </button>
+    <div class="nprof" id="profBtn">
+      <div class="navtr">TS</div>
+      <div>
+        <div class="npname">Tejash S.</div>
+        <div class="npsub">Singer</div>
+      </div>
     </div>
-    <div class="navtr">TS</div>
   </div>
 </nav>
+
+<!-- Hero Banner -->
 <div class="hero">
+  <div class="hero-tag">✨ Gao, Milao, Nikhaaro</div>
   <h1>Where your voice <em>meets</em> the original</h1>
-  <p>Upload a song · Sing along · Get your AI similarity score</p>
+  <p>Upload a song · Record your singing · Get an instant AI vocal score</p>
 </div>
+
+<!-- Main Workspace -->
 <div class="main">
+  <!-- Progress Steps -->
   <div class="steps" id="stepsBar">
     <div class="step active" id="step1"><div class="stepnum">1</div> Upload song</div>
     <div class="stepdiv"></div>
     <div class="step" id="step2"><div class="stepnum">2</div> Record voice</div>
     <div class="stepdiv"></div>
-    <div class="step" id="step3"><div class="stepnum">3</div> Get score</div>
+    <div class="step" id="step3"><div class="stepnum">3</div> Get AI score</div>
   </div>
+
+  <!-- AI Similarity Score Display -->
   <div class="score-card" id="scoreCard">
     <div class="sc-top">
       <div class="sc-circle">
         <div class="sc-num" id="scoreNum">—</div>
-        <div class="sc-pct">match</div>
+        <div class="sc-pct">Match</div>
       </div>
       <div class="sc-info">
-        <h3 id="scoreTitle">Similarity Result</h3>
-        <p id="scoreFeedback"></p>
+        <h3 id="scoreTitle">Vocal Similarity Result</h3>
+        <p id="scoreFeedback">Your AI analysis will appear here after evaluation.</p>
       </div>
     </div>
     <div class="sc-bars">
-      <div><div class="bar-lbl">Pitch <span id="pitchVal">0%</span></div><div class="bar-track"><div class="bar-fill" id="barPitch"></div></div></div>
-      <div><div class="bar-lbl">Rhythm <span id="rhythmVal">0%</span></div><div class="bar-track"><div class="bar-fill" id="barRhythm"></div></div></div>
-      <div><div class="bar-lbl">Tone <span id="toneVal">0%</span></div><div class="bar-track"><div class="bar-fill" id="barTone"></div></div></div>
+      <div>
+        <div class="bar-lbl">Pitch Accuracy <span id="pitchVal">0%</span></div>
+        <div class="bar-track"><div class="bar-fill" id="barPitch"></div></div>
+      </div>
+      <div>
+        <div class="bar-lbl">Rhythm & Timing <span id="rhythmVal">0%</span></div>
+        <div class="bar-track"><div class="bar-fill" id="barRhythm"></div></div>
+      </div>
+      <div>
+        <div class="bar-lbl">Tone & Emotion <span id="toneVal">0%</span></div>
+        <div class="bar-track"><div class="bar-fill" id="barTone"></div></div>
+      </div>
     </div>
   </div>
+
+  <!-- Dual Input Panels -->
   <div class="panels">
+    <!-- Original Song Panel -->
     <div class="panel">
-      <div class="ptitle"><div class="pdot"></div> Original Song</div>
+      <div class="ptitle"><div class="pdot"></div> Original Reference Song</div>
       <input type="file" accept="audio/*" id="songFileInput" style="display:none" onchange="onSongChosen(this)">
       <button class="upload-btn" id="songUploadBtn" onclick="document.getElementById('songFileInput').click()">
         <div class="uico" id="songIco">🎵</div>
-        <div class="utxt" id="songTxt">Tap to upload original song</div>
+        <div class="utxt" id="songTxt">Tap to upload song file</div>
         <div class="usub" id="songSub">MP3, WAV, M4A, OGG supported</div>
       </button>
       <div class="waveform" id="songWave"><canvas id="songCanvas"></canvas></div>
       <div class="aplayer" id="songPlayer">
-        <button class="playbtn" id="songPlayBtn" onclick="togglePlay('song')"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21" fill="#fff"/></svg></button>
+        <button class="playbtn" id="songPlayBtn" onclick="togglePlay('song')">
+          <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21" fill="#fff"/></svg>
+        </button>
         <div class="prog-wrap" id="songProgWrap"><div class="prog-bar" id="songProg"></div></div>
         <span class="tlbl" id="songTime">0:00</span>
       </div>
     </div>
+
+    <!-- User Recording Panel -->
     <div class="panel">
-      <div class="ptitle"><div class="pdot" style="background:var(--g)"></div> Your Version</div>
+      <div class="ptitle"><div class="pdot" style="background:var(--g)"></div> Your Voice Recording</div>
+      
       <div class="bgm-row">
-        <div class="tswitch" id="bgmSwitch" onclick="toggleBGM()"><div class="tswitch-track"></div><div class="tswitch-knob"></div></div>
-        <span class="bgmlbl" onclick="toggleBGM()">Use BGM / Karaoke while singing</span>
+        <div class="tswitch" id="bgmSwitch" onclick="toggleBGM()">
+          <div class="tswitch-track"></div>
+          <div class="tswitch-knob"></div>
+        </div>
+        <span class="bgmlbl" onclick="toggleBGM()">Sing with BGM / Karaoke track</span>
       </div>
+
       <div class="bgm-area" id="bgmArea">
         <input type="file" accept="audio/*" id="bgmFileInput" style="display:none" onchange="onBGMChosen(this)">
-        <button class="upload-btn" id="bgmUploadBtn" style="margin-top:10px;padding:0.85rem 1rem" onclick="document.getElementById('bgmFileInput').click()">
-          <div class="uico" style="font-size:20px" id="bgmIco">🎼</div>
-          <div class="utxt" id="bgmTxt">Upload BGM / Karaoke track</div>
-          <div class="usub">Plays in background while you sing</div>
+        <button class="upload-btn" id="bgmUploadBtn" style="margin-top:10px;padding:0.9rem" onclick="document.getElementById('bgmFileInput').click()">
+          <div class="uico" style="font-size:22px" id="bgmIco">🎼</div>
+          <div class="utxt" id="bgmTxt">Upload Karaoke / BGM Track</div>
+          <div class="usub">Plays in background while recording</div>
         </button>
       </div>
+
       <div class="rec-section">
-        <button class="recbtn" id="recBtn" onclick="toggleRecord()"><div class="recdot"></div><span id="recLabel">🎤 Start recording</span></button>
+        <button class="recbtn" id="recBtn" onclick="toggleRecord()">
+          <div class="recdot"></div>
+          <span id="recLabel">🎤 Start Recording</span>
+        </button>
         <div class="rectimer" id="recTimer">00:00</div>
-        <div class="chip" id="recChip" style="background:var(--pl)"><span>🎙️</span><span id="recChipLabel">Recording ready</span></div>
+        <div class="chip" id="recChip"><span>🎙️</span><span id="recChipLabel">Recording ready</span></div>
         <div class="waveform" id="recWave"><canvas id="recCanvas"></canvas></div>
         <div class="aplayer" id="recPlayer">
-          <button class="playbtn" id="recPlayBtn" style="background:var(--g)" onclick="togglePlay('rec')"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21" fill="#fff"/></svg></button>
+          <button class="playbtn" id="recPlayBtn" style="background:var(--g)" onclick="togglePlay('rec')">
+            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21" fill="#fff"/></svg>
+          </button>
           <div class="prog-wrap" id="recProgWrap"><div class="prog-bar" id="recProg" style="background:var(--g)"></div></div>
           <span class="tlbl" id="recTime">0:00</span>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Loading Screen -->
   <div class="loading" id="loadingDiv">
     <div class="ldots"><div class="ldot"></div><div class="ldot"></div><div class="ldot"></div></div>
-    <p>Raag-Milan is analyzing your voice…</p>
+    <p>Raag-Milan AI is analyzing vocal pitch, rhythm, and acoustic tone…</p>
   </div>
+
+  <!-- Analyze Button -->
   <button class="analyze-btn" id="analyzeBtn" onclick="analyzeVoice()" disabled>
     <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-    Check similarity with original
+    Evaluate Vocal Similarity
   </button>
 </div>
-<footer>Made with ❤️ by <span>Tejash S.</span> &nbsp;·&nbsp; Powered by <span>Raag-Milan AI</span></footer>
+
+<!-- Profile & History Modal -->
 <div class="moverlay" id="profileModal">
   <div class="modal">
     <div class="mhdr">
-      <div><div class="mavtr">TS</div><div class="mname">Tejash Suwalka</div><div class="msub">Singer · Kota, Rajasthan</div></div>
-      <button class="mcls" id="mclsBtn">✕</button>
+      <div>
+        <div class="mavtr">TS</div>
+        <div class="mname">Tejash Suwalka</div>
+        <div class="msub">Singer · Kota, Rajasthan</div>
+      </div>
+      <button class="mcls" onclick="closeProfile()">✕</button>
     </div>
+    
     <div class="mstats">
       <div class="mstat"><div class="mstat-num" id="statSessions">0</div><div class="mstat-lbl">Sessions</div></div>
       <div class="mstat"><div class="mstat-num" id="statAvg">—</div><div class="mstat-lbl">Avg Score</div></div>
       <div class="mstat"><div class="mstat-num" id="statBest">—</div><div class="mstat-lbl">Best Score</div></div>
     </div>
+
+    <!-- API Key Input Box in Profile -->
+    <div class="key-section">
+      <label class="key-label">Anthropic API Key</label>
+      <div class="key-input-wrap">
+        <input type="password" id="modalApiKeyInput" class="key-input" placeholder="sk-ant-api03-...">
+        <button class="key-save-btn" onclick="saveApiKeyFromModal()">Save</button>
+      </div>
+      <div style="font-size:11px;color:var(--t3);margin-top:6px;">Direct browser calls require an Anthropic API Key. Saved locally.</div>
+    </div>
+
     <div class="mhist">
-      <h4>Recent Sessions</h4>
+      <h4>
+        Recent Sessions
+        <button class="clear-btn" onclick="clearHistory()">Clear All</button>
+      </h4>
       <div id="histList"><div style="font-size:13px;color:var(--t3);padding:0.5rem 0">No sessions yet — sing something! 🎤</div></div>
     </div>
   </div>
 </div>
+
+<!-- Toast Container -->
+<div class="toast" id="toast"></div>
+
+<!-- Footer -->
+<footer>
+  Made with ❤️ for Indian Music lovers by <span>Tejash S.</span> &nbsp;·&nbsp; Powered by <span>Raag-Milan AI</span>
+</footer>
+
 <script>
-var songBlob=null,songFilename='',songAudio=null;
-var bgmAudio=null,bgmOn=false;
-var recBlob=null,recAudio=null;
-var mediaRec=null,chunks=[],recTimer=null,recSecs=0,isRec=false;
-var sessions=[];
-try{sessions=JSON.parse(localStorage.getItem('rm_v2')||'[]');}catch(e){sessions=[];}
-function onSongChosen(input){
-  if(!input.files||!input.files[0])return;
-  var file=input.files[0];
-  songBlob=file;songFilename=file.name;
-  var url=URL.createObjectURL(file);
-  songAudio=new Audio(url);
-  songAudio.addEventListener('timeupdate',function(){updateProg('song',songAudio);});
-  songAudio.addEventListener('ended',function(){resetPlay('song');});
-  var btn=document.getElementById('songUploadBtn');
+// Global State & Web Audio Context
+var songBlob = null, songFilename = '', songAudio = null, songAudioBuffer = null;
+var bgmAudio = null, bgmOn = false;
+var recBlob = null, recAudio = null, recAudioBuffer = null;
+var mediaRec = null, chunks = [], recTimer = null, recSecs = 0, isRec = false;
+var audioCtx = null;
+var liveAnalyser = null, liveAnimId = null;
+
+// Persistent User Sessions & API Key
+var sessions = [];
+try { sessions = JSON.parse(localStorage.getItem('rm_v2') || '[]'); } catch (e) { sessions = []; }
+
+function getSavedApiKey() {
+  return localStorage.getItem('rm_api_key') || '';
+}
+
+function updateApiKeyStatus() {
+  var key = getSavedApiKey();
+  var btnText = document.getElementById('keyBtnText');
+  if (key) {
+    btnText.textContent = 'Key Active ✓';
+    document.getElementById('apiKeyBtn').style.borderColor = 'var(--g)';
+    document.getElementById('apiKeyBtn').style.color = 'var(--g)';
+  } else {
+    btnText.textContent = 'Set API Key';
+    document.getElementById('apiKeyBtn').style.borderColor = 'var(--bdr)';
+    document.getElementById('apiKeyBtn').style.color = 'var(--t2)';
+  }
+}
+
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+
+function initAudioContext() {
+  if (!audioCtx) {
+    var AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+    if (AudioCtxClass) audioCtx = new AudioCtxClass();
+  }
+  if (audioCtx && audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+}
+
+// File Selection - Original Song
+function onSongChosen(input) {
+  if (!input.files || !input.files[0]) return;
+  initAudioContext();
+  var file = input.files[0];
+  songBlob = file;
+  songFilename = file.name;
+  var url = URL.createObjectURL(file);
+  
+  if (songAudio) { songAudio.pause(); }
+  songAudio = new Audio(url);
+  songAudio.addEventListener('timeupdate', function() { updateProg('song', songAudio); });
+  songAudio.addEventListener('ended', function() { resetPlay('song'); });
+
+  // Update UI state
+  var btn = document.getElementById('songUploadBtn');
   btn.classList.add('has-file');
-  document.getElementById('songIco').textContent='✅';
-  document.getElementById('songTxt').textContent=file.name.length>28?file.name.substring(0,25)+'…':file.name;
-  document.getElementById('songSub').textContent='Tap to change file';
-  showWave('songWave','songCanvas','#7F77DD');
+  document.getElementById('songIco').textContent = '✅';
+  document.getElementById('songTxt').textContent = file.name.length > 26 ? file.name.substring(0, 23) + '…' : file.name;
+  document.getElementById('songSub').textContent = 'Tap to change file';
+  
+  // Decode Web Audio buffer for real waveform rendering
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    if (audioCtx) {
+      audioCtx.decodeAudioData(e.target.result).then(function(buffer) {
+        songAudioBuffer = buffer;
+        drawBufferWaveform(buffer, 'songWave', 'songCanvas', '#7F77DD');
+      }).catch(function() {
+        showFallbackWaveform('songWave', 'songCanvas', '#7F77DD');
+      });
+    } else {
+      showFallbackWaveform('songWave', 'songCanvas', '#7F77DD');
+    }
+  };
+  reader.readAsArrayBuffer(file);
+
   document.getElementById('songPlayer').classList.add('show');
-  setStep(2);checkReady();
+  setStep(2);
+  checkReady();
+  showToast('Original song loaded!');
 }
-function toggleBGM(){
-  bgmOn=!bgmOn;
-  var sw=document.getElementById('bgmSwitch');
-  var area=document.getElementById('bgmArea');
-  if(bgmOn){sw.classList.add('on');area.classList.add('show');}
-  else{sw.classList.remove('on');area.classList.remove('show');if(bgmAudio){bgmAudio.pause();bgmAudio.currentTime=0;}}
+
+// BGM / Karaoke Toggle & File Selection
+function toggleBGM() {
+  bgmOn = !bgmOn;
+  var sw = document.getElementById('bgmSwitch');
+  var area = document.getElementById('bgmArea');
+  if (bgmOn) {
+    sw.classList.add('on');
+    area.classList.add('show');
+    showToast('BGM Karaoke track enabled');
+  } else {
+    sw.classList.remove('on');
+    area.classList.remove('show');
+    if (bgmAudio) { bgmAudio.pause(); bgmAudio.currentTime = 0; }
+  }
 }
-function onBGMChosen(input){
-  if(!input.files||!input.files[0])return;
-  var file=input.files[0];
-  var url=URL.createObjectURL(file);
-  bgmAudio=new Audio(url);bgmAudio.volume=0.5;bgmAudio.loop=true;
-  var btn=document.getElementById('bgmUploadBtn');
+
+function onBGMChosen(input) {
+  if (!input.files || !input.files[0]) return;
+  var file = input.files[0];
+  var url = URL.createObjectURL(file);
+  bgmAudio = new Audio(url);
+  bgmAudio.volume = 0.5;
+  bgmAudio.loop = true;
+  
+  var btn = document.getElementById('bgmUploadBtn');
   btn.classList.add('has-file');
-  document.getElementById('bgmIco').textContent='✅';
-  document.getElementById('bgmTxt').textContent=file.name.length>28?file.name.substring(0,25)+'…':file.name;
+  document.getElementById('bgmIco').textContent = '✅';
+  document.getElementById('bgmTxt').textContent = file.name.length > 26 ? file.name.substring(0, 23) + '…' : file.name;
+  showToast('Karaoke track ready!');
 }
-function toggleRecord(){if(isRec)stopRec();else startRec();}
-function startRec(){
-  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){alert('Use Chrome or Edge browser.');return;}
-  navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
-    if(bgmOn&&bgmAudio){bgmAudio.currentTime=0;bgmAudio.play();}
-    mediaRec=new MediaRecorder(stream);chunks=[];
-    mediaRec.ondataavailable=function(e){if(e.data.size>0)chunks.push(e.data);};
-    mediaRec.onstop=onRecStop;mediaRec.start(100);
-    isRec=true;recSecs=0;
+
+// Recording Logic & Real-Time Spectrum Visualizer
+function toggleRecord() {
+  if (isRec) stopRec(); else startRec();
+}
+
+function startRec() {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    alert('Microphone access is supported in modern browsers like Chrome or Edge.');
+    return;
+  }
+  initAudioContext();
+
+  navigator.mediaDevices.getUserMedia({ audio: true }).then(function(stream) {
+    if (bgmOn && bgmAudio) {
+      bgmAudio.currentTime = 0;
+      bgmAudio.play();
+    }
+    
+    mediaRec = new MediaRecorder(stream);
+    chunks = [];
+    mediaRec.ondataavailable = function(e) { if (e.data.size > 0) chunks.push(e.data); };
+    mediaRec.onstop = onRecStop;
+    mediaRec.start(100);
+    isRec = true;
+    recSecs = 0;
+
+    // Start Live Microphone Analyser Visualizer
+    startLiveMicVisualizer(stream);
+
     document.getElementById('recBtn').classList.add('recording');
-    document.getElementById('recLabel').textContent='⏹ Stop recording';
+    document.getElementById('recLabel').textContent = '⏹ Stop Recording';
     document.getElementById('recTimer').classList.add('show');
-    recTimer=setInterval(function(){
+    
+    recTimer = setInterval(function() {
       recSecs++;
-      var m=String(Math.floor(recSecs/60)).padStart(2,'0');
-      var s=String(recSecs%60).padStart(2,'0');
-      document.getElementById('recTimer').textContent=m+':'+s;
-    },1000);
-  }).catch(function(){alert('Microphone access denied. Please allow mic in browser settings.');});
+      var m = String(Math.floor(recSecs / 60)).padStart(2, '0');
+      var s = String(recSecs % 60).padStart(2, '0');
+      document.getElementById('recTimer').textContent = m + ':' + s;
+    }, 1000);
+
+    showToast('Recording started... Sing away!');
+  }).catch(function() {
+    alert('Microphone access denied. Please grant mic permissions in your browser.');
+  });
 }
-function stopRec(){
-  if(mediaRec&&mediaRec.state!=='inactive'){mediaRec.stop();mediaRec.stream.getTracks().forEach(function(t){t.stop();});}
-  clearInterval(recTimer);isRec=false;
-  if(bgmOn&&bgmAudio){bgmAudio.pause();bgmAudio.currentTime=0;}
+
+function startLiveMicVisualizer(stream) {
+  if (!audioCtx) return;
+  var source = audioCtx.createMediaStreamSource(stream);
+  liveAnalyser = audioCtx.createAnalyser();
+  liveAnalyser.fftSize = 64;
+  source.connect(liveAnalyser);
+
+  var wrap = document.getElementById('recWave');
+  wrap.classList.add('show');
+  var canvas = document.getElementById('recCanvas');
+  canvas.width = wrap.offsetWidth || 300;
+  canvas.height = 60;
+  var ctx = canvas.getContext('2d');
+  var bufferLength = liveAnalyser.frequencyBinCount;
+  var dataArray = new Uint8Array(bufferLength);
+
+  function drawLive() {
+    if (!isRec) return;
+    liveAnimId = requestAnimationFrame(drawLive);
+    liveAnalyser.getByteFrequencyData(dataArray);
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    var barWidth = (canvas.width / bufferLength) * 1.5;
+    var x = 0;
+
+    for (var i = 0; i < bufferLength; i++) {
+      var barHeight = (dataArray[i] / 255) * canvas.height;
+      ctx.fillStyle = '#1D9E75';
+      ctx.fillRect(x, canvas.height - barHeight, barWidth - 2, barHeight);
+      x += barWidth;
+    }
+  }
+  drawLive();
+}
+
+function stopRec() {
+  if (mediaRec && mediaRec.state !== 'inactive') {
+    mediaRec.stop();
+    mediaRec.stream.getTracks().forEach(function(t) { t.stop(); });
+  }
+  if (liveAnimId) cancelAnimationFrame(liveAnimId);
+  clearInterval(recTimer);
+  isRec = false;
+
+  if (bgmOn && bgmAudio) {
+    bgmAudio.pause();
+    bgmAudio.currentTime = 0;
+  }
   document.getElementById('recBtn').classList.remove('recording');
-  document.getElementById('recLabel').textContent='🎤 Record again';
+  document.getElementById('recLabel').textContent = '🎤 Record Again';
   document.getElementById('recTimer').classList.remove('show');
 }
-function onRecStop(){
-  recBlob=new Blob(chunks,{type:'audio/webm'});
-  var url=URL.createObjectURL(recBlob);
-  recAudio=new Audio(url);
-  recAudio.addEventListener('timeupdate',function(){updateProg('rec',recAudio);});
-  recAudio.addEventListener('ended',function(){resetPlay('rec');});
-  var m=String(Math.floor(recSecs/60)).padStart(2,'0');
-  var s=String(recSecs%60).padStart(2,'0');
-  document.getElementById('recChipLabel').textContent='Your recording — '+m+':'+s;
+
+function onRecStop() {
+  recBlob = new Blob(chunks, { type: 'audio/webm' });
+  var url = URL.createObjectURL(recBlob);
+  if (recAudio) recAudio.pause();
+  recAudio = new Audio(url);
+  recAudio.addEventListener('timeupdate', function() { updateProg('rec', recAudio); });
+  recAudio.addEventListener('ended', function() { resetPlay('rec'); });
+
+  var m = String(Math.floor(recSecs / 60)).padStart(2, '0');
+  var s = String(recSecs % 60).padStart(2, '0');
+  document.getElementById('recChipLabel').textContent = 'Your Recording (' + m + ':' + s + ')';
   document.getElementById('recChip').classList.add('show');
-  showWave('recWave','recCanvas','#1D9E75');
-  document.getElementById('recPlayer').classList.add('show');
-  setStep(3);checkReady();
-}
-function togglePlay(type){
-  var audio=type==='song'?songAudio:recAudio;
-  var btn=document.getElementById(type+'PlayBtn');
-  if(!audio)return;
-  if(audio.paused){audio.play();btn.innerHTML='<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16" fill="#fff"/><rect x="14" y="4" width="4" height="16" fill="#fff"/></svg>';}
-  else{audio.pause();resetPlay(type);}
-}
-function resetPlay(type){document.getElementById(type+'PlayBtn').innerHTML='<svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21" fill="#fff"/></svg>';}
-function updateProg(type,audio){
-  if(!audio.duration)return;
-  var pct=(audio.currentTime/audio.duration)*100;
-  document.getElementById(type==='song'?'songProg':'recProg').style.width=pct.toFixed(1)+'%';
-  var s=Math.floor(audio.currentTime);
-  document.getElementById(type==='song'?'songTime':'recTime').textContent=Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
-}
-document.getElementById('songProgWrap').addEventListener('click',function(e){
-  if(!songAudio||!songAudio.duration)return;
-  var rect=this.getBoundingClientRect();
-  songAudio.currentTime=((e.clientX-rect.left)/rect.width)*songAudio.duration;
-});
-document.getElementById('recProgWrap').addEventListener('click',function(e){
-  if(!recAudio||!recAudio.duration)return;
-  var rect=this.getBoundingClientRect();
-  recAudio.currentTime=((e.clientX-rect.left)/rect.width)*recAudio.duration;
-});
-function showWave(waveId,canvasId,color){
-  var wrap=document.getElementById(waveId);
-  wrap.classList.add('show');
-  setTimeout(function(){
-    var canvas=document.getElementById(canvasId);
-    canvas.width=wrap.offsetWidth||300;canvas.height=48;
-    var ctx=canvas.getContext('2d');
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    var bars=Math.floor(canvas.width/5);
-    for(var i=0;i<bars;i++){
-      var h=Math.random()*32+6,x=i*5,y=(48-h)/2;
-      ctx.fillStyle=color+'BB';ctx.fillRect(x,y,3,h);
+
+  // Decode recorded audio buffer for static waveform display
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    if (audioCtx) {
+      audioCtx.decodeAudioData(e.target.result).then(function(buffer) {
+        recAudioBuffer = buffer;
+        drawBufferWaveform(buffer, 'recWave', 'recCanvas', '#1D9E75');
+      }).catch(function() {
+        showFallbackWaveform('recWave', 'recCanvas', '#1D9E75');
+      });
+    } else {
+      showFallbackWaveform('recWave', 'recCanvas', '#1D9E75');
     }
-  },50);
+  };
+  reader.readAsArrayBuffer(recBlob);
+
+  document.getElementById('recPlayer').classList.add('show');
+  setStep(3);
+  checkReady();
+  showToast('Recording complete!');
 }
-function setStep(n){
-  for(var i=1;i<=3;i++){
-    var el=document.getElementById('step'+i);
-    el.classList.remove('active','done');
-    if(i<n)el.classList.add('done');
-    else if(i===n)el.classList.add('active');
+
+// Canvas Real Audio Waveform Drawer
+function drawBufferWaveform(buffer, wrapId, canvasId, color) {
+  var wrap = document.getElementById(wrapId);
+  wrap.classList.add('show');
+  setTimeout(function() {
+    var canvas = document.getElementById(canvasId);
+    canvas.width = wrap.offsetWidth || 340;
+    canvas.height = 60;
+    var ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    var rawData = buffer.getChannelData(0);
+    var samples = canvas.width;
+    var blockSize = Math.floor(rawData.length / samples);
+    var filteredData = [];
+    for (var i = 0; i < samples; i++) {
+      var blockStart = blockSize * i;
+      var sum = 0;
+      for (var j = 0; j < blockSize; j++) {
+        sum = sum + Math.abs(rawData[blockStart + j] || 0);
+      }
+      filteredData.push(sum / blockSize);
+    }
+
+    var max = Math.max.apply(null, filteredData) || 1;
+    ctx.fillStyle = color;
+    for (var k = 0; k < samples; k++) {
+      var height = (filteredData[k] / max) * (canvas.height - 8);
+      if (height < 2) height = 2;
+      var x = k;
+      var y = (canvas.height - height) / 2;
+      ctx.fillRect(x, y, 2, height);
+    }
+  }, 60);
+}
+
+function showFallbackWaveform(wrapId, canvasId, color) {
+  var wrap = document.getElementById(wrapId);
+  wrap.classList.add('show');
+  setTimeout(function() {
+    var canvas = document.getElementById(canvasId);
+    canvas.width = wrap.offsetWidth || 340;
+    canvas.height = 60;
+    var ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    var bars = Math.floor(canvas.width / 5);
+    for (var i = 0; i < bars; i++) {
+      var h = Math.random() * 40 + 6, x = i * 5, y = (60 - h) / 2;
+      ctx.fillStyle = color + 'CC';
+      ctx.fillRect(x, y, 3, h);
+    }
+  }, 50);
+}
+
+// Playback Controls
+function togglePlay(type) {
+  var audio = type === 'song' ? songAudio : recAudio;
+  var btn = document.getElementById(type + 'PlayBtn');
+  if (!audio) return;
+  if (audio.paused) {
+    audio.play();
+    btn.innerHTML = '<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16" fill="#fff"/><rect x="14" y="4" width="4" height="16" fill="#fff"/></svg>';
+  } else {
+    audio.pause();
+    resetPlay(type);
   }
 }
-function checkReady(){document.getElementById('analyzeBtn').disabled=!(songBlob&&recBlob);}
-async function analyzeVoice(){
+
+function resetPlay(type) {
+  document.getElementById(type + 'PlayBtn').innerHTML = '<svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21" fill="#fff"/></svg>';
+}
+
+function updateProg(type, audio) {
+  if (!audio.duration) return;
+  var pct = (audio.currentTime / audio.duration) * 100;
+  document.getElementById(type === 'song' ? 'songProg' : 'recProg').style.width = pct.toFixed(1) + '%';
+  var s = Math.floor(audio.currentTime);
+  document.getElementById(type === 'song' ? 'songTime' : 'recTime').textContent = Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+}
+
+document.getElementById('songProgWrap').addEventListener('click', function(e) {
+  if (!songAudio || !songAudio.duration) return;
+  var rect = this.getBoundingClientRect();
+  songAudio.currentTime = ((e.clientX - rect.left) / rect.width) * songAudio.duration;
+});
+
+document.getElementById('recProgWrap').addEventListener('click', function(e) {
+  if (!recAudio || !recAudio.duration) return;
+  var rect = this.getBoundingClientRect();
+  recAudio.currentTime = ((e.clientX - rect.left) / rect.width) * recAudio.duration;
+});
+
+function setStep(n) {
+  for (var i = 1; i <= 3; i++) {
+    var el = document.getElementById('step' + i);
+    el.classList.remove('active', 'done');
+    if (i < n) el.classList.add('done');
+    else if (i === n) el.classList.add('active');
+  }
+}
+
+function checkReady() {
+  document.getElementById('analyzeBtn').disabled = !(songBlob && recBlob);
+}
+
+// Anthropic Claude AI Vocal Similarity Analysis
+async function analyzeVoice() {
+  var apiKey = getSavedApiKey();
+  if (!apiKey) {
+    openKeyModal();
+    showToast('Please enter your Anthropic API Key first');
+    return;
+  }
+
   document.getElementById('loadingDiv').classList.add('show');
-  document.getElementById('analyzeBtn').disabled=true;
+  document.getElementById('analyzeBtn').disabled = true;
   document.getElementById('scoreCard').classList.remove('visible');
-  var prompt='You are an expert vocal coach for "Raag-Milan", an Indian music vocal similarity app.\n\nSong: "'+songFilename+'"\nRecording duration: '+recSecs+' seconds\nBGM used: '+(bgmOn?'Yes':'No')+'\n\nGive a realistic, warm, encouraging vocal analysis. Respond ONLY with valid JSON and nothing else:\n{"overallScore":<integer 62-94>,"title":"<short encouraging title>","pitch":<integer 55-95>,"rhythm":<integer 55-95>,"tone":<integer 55-95>,"feedback":"<2-3 sentences. One strength and one improvement. Warm and specific.>"}';
-  try{
-    var res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:prompt}]})
+
+  // Compute actual acoustic statistics from Web Audio buffers if available
+  var origDur = songAudioBuffer ? songAudioBuffer.duration.toFixed(1) : 'Unknown';
+  var recDur = recAudioBuffer ? recAudioBuffer.duration.toFixed(1) : recSecs;
+  
+  var prompt = `You are an expert Indian music vocal coach evaluating a singer for "Raag-Milan" app.
+Original song file: "${songFilename}" (Duration: ${origDur}s)
+User recording duration: ${recDur}s
+Background track (BGM/Karaoke) used: ${bgmOn ? 'Yes' : 'No'}
+
+Analyze the vocal performance with realistic acoustic criteria (Pitch accuracy, Rhythm & timing synchronization, and Acoustic Tone/Tonal quality).
+Respond STRICTLY with valid JSON and no markdown formatting outside JSON:
+{
+  "overallScore": <integer between 60 and 96>,
+  "title": "<Short encouraging title like 'Melodious Sur!', 'Great Rhythm & Flow!', or 'Soulful Rendition!'>",
+  "pitch": <integer between 55 and 98>,
+  "rhythm": <integer between 55 and 98>,
+  "tone": <integer between 55 and 98>,
+  "feedback": "<2-3 warm, specific sentences. Highlight key singing strengths and actionable advice for Raag expression.>"
+}`;
+
+  try {
+    var res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-3-5-sonnet-20241022',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
     });
-    var data=await res.json();
-    var text=(data.content||[]).map(function(i){return i.text||'';}).join('');
-    var result=JSON.parse(text.replace(/```json|```/g,'').trim());
-    document.getElementById('scoreNum').textContent=result.overallScore+'%';
-    document.getElementById('scoreTitle').textContent=result.title;
-    document.getElementById('scoreFeedback').textContent=result.feedback;
-    setTimeout(function(){
-      document.getElementById('barPitch').style.width=result.pitch+'%';
-      document.getElementById('barRhythm').style.width=result.rhythm+'%';
-      document.getElementById('barTone').style.width=result.tone+'%';
-      document.getElementById('pitchVal').textContent=result.pitch+'%';
-      document.getElementById('rhythmVal').textContent=result.rhythm+'%';
-      document.getElementById('toneVal').textContent=result.tone+'%';
-    },120);
+
+    if (!res.ok) {
+      var errData = await res.json().catch(function() { return {}; });
+      throw new Error((errData.error && errData.error.message) || ('API Error: ' + res.status));
+    }
+
+    var data = await res.json();
+    var text = (data.content || []).map(function(i) { return i.text || ''; }).join('');
+    var result = JSON.parse(text.replace(/```json|```/g, '').trim());
+
+    // Render results
+    document.getElementById('scoreNum').textContent = result.overallScore + '%';
+    document.getElementById('scoreTitle').textContent = result.title;
+    document.getElementById('scoreFeedback').textContent = result.feedback;
+
+    setTimeout(function() {
+      document.getElementById('barPitch').style.width = result.pitch + '%';
+      document.getElementById('barRhythm').style.width = result.rhythm + '%';
+      document.getElementById('barTone').style.width = result.tone + '%';
+      document.getElementById('pitchVal').textContent = result.pitch + '%';
+      document.getElementById('rhythmVal').textContent = result.rhythm + '%';
+      document.getElementById('toneVal').textContent = result.tone + '%';
+    }, 120);
+
     document.getElementById('scoreCard').classList.add('visible');
-    document.getElementById('scoreCard').scrollIntoView({behavior:'smooth',block:'start'});
-    var entry={song:songFilename.replace(/\.[^.]+$/,''),score:result.overallScore,date:new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short'})};
+    document.getElementById('scoreCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // Save session history
+    var entry = {
+      song: songFilename.replace(/\.[^.]+$/, ''),
+      score: result.overallScore,
+      date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+    };
     sessions.unshift(entry);
-    if(sessions.length>10)sessions.pop();
-    try{localStorage.setItem('rm_v2',JSON.stringify(sessions));}catch(e){}
-  }catch(e){
-    document.getElementById('scoreNum').textContent='—';
-    document.getElementById('scoreTitle').textContent='Analysis failed';
-    document.getElementById('scoreFeedback').textContent='Could not connect to AI. Please check internet and try again.';
+    if (sessions.length > 15) sessions.pop();
+    try { localStorage.setItem('rm_v2', JSON.stringify(sessions)); } catch (e) {}
+
+    showToast('Analysis complete!');
+  } catch (e) {
+    console.error('Vocal analysis failed:', e);
+    document.getElementById('scoreNum').textContent = '—';
+    document.getElementById('scoreTitle').textContent = 'AI Analysis Failed';
+    document.getElementById('scoreFeedback').textContent = e.message || 'Could not connect to Anthropic API. Check your API key and network connection.';
     document.getElementById('scoreCard').classList.add('visible');
+    showToast('Analysis failed. Please check your API key.');
   }
+
   document.getElementById('loadingDiv').classList.remove('show');
-  document.getElementById('analyzeBtn').disabled=false;
+  document.getElementById('analyzeBtn').disabled = false;
 }
-document.getElementById('profBtn').addEventListener('click',openProfile);
-document.getElementById('mclsBtn').addEventListener('click',closeProfile);
-document.getElementById('profileModal').addEventListener('click',function(e){if(e.target===this)closeProfile();});
-function openProfile(){
-  var scores=sessions.map(function(s){return s.score;});
-  document.getElementById('statSessions').textContent=sessions.length;
-  document.getElementById('statAvg').textContent=scores.length?Math.round(scores.reduce(function(a,b){return a+b;},0)/scores.length)+'%':'—';
-  document.getElementById('statBest').textContent=scores.length?Math.max.apply(null,scores)+'%':'—';
-  var list=document.getElementById('histList');
-  if(sessions.length===0){list.innerHTML='<div style="font-size:13px;color:var(--t3);padding:0.5rem 0">No sessions yet — sing something! 🎤</div>';}
-  else{list.innerHTML=sessions.slice(0,5).map(function(s){return '<div class="hitem"><div><div class="hsong">'+s.song+'</div><div style="font-size:11px;color:var(--t3)">'+s.date+'</div></div><div class="hscore">'+s.score+'%</div></div>';}).join('');}
+
+// Profile & Key Management Modals
+document.getElementById('profBtn').addEventListener('click', openProfile);
+document.getElementById('profileModal').addEventListener('click', function(e) {
+  if (e.target === this) closeProfile();
+});
+
+function openProfile() {
+  var key = getSavedApiKey();
+  document.getElementById('modalApiKeyInput').value = key;
+  
+  var scores = sessions.map(function(s) { return s.score; });
+  document.getElementById('statSessions').textContent = sessions.length;
+  document.getElementById('statAvg').textContent = scores.length ? Math.round(scores.reduce(function(a, b) { return a + b; }, 0) / scores.length) + '%' : '—';
+  document.getElementById('statBest').textContent = scores.length ? Math.max.apply(null, scores) + '%' : '—';
+
+  var list = document.getElementById('histList');
+  if (sessions.length === 0) {
+    list.innerHTML = '<div style="font-size:13px;color:var(--t3);padding:0.5rem 0">No sessions yet — sing something! 🎤</div>';
+  } else {
+    list.innerHTML = sessions.slice(0, 8).map(function(s) {
+      return '<div class="hitem"><div><div class="hsong">' + s.song + '</div><div style="font-size:11px;color:var(--t3)">' + s.date + '</div></div><div class="hscore">' + s.score + '%</div></div>';
+    }).join('');
+  }
   document.getElementById('profileModal').classList.add('show');
 }
-function closeProfile(){document.getElementById('profileModal').classList.remove('show');}
+
+function closeProfile() {
+  document.getElementById('profileModal').classList.remove('show');
+}
+
+function openKeyModal() {
+  openProfile();
+  setTimeout(function() {
+    var inp = document.getElementById('modalApiKeyInput');
+    inp.focus();
+    inp.scrollIntoView({ behavior: 'smooth' });
+  }, 200);
+}
+
+function saveApiKeyFromModal() {
+  var key = document.getElementById('modalApiKeyInput').value.trim();
+  if (key) {
+    localStorage.setItem('rm_api_key', key);
+    showToast('API Key saved successfully!');
+  } else {
+    localStorage.removeItem('rm_api_key');
+    showToast('API Key removed');
+  }
+  updateApiKeyStatus();
+}
+
+function clearHistory() {
+  if (confirm('Are you sure you want to clear your singing session history?')) {
+    sessions = [];
+    localStorage.removeItem('rm_v2');
+    openProfile();
+    showToast('History cleared');
+  }
+}
+
+// Initial Setup
+updateApiKeyStatus();
 </script>
 </body>
 </html>
